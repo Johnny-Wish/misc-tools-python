@@ -1,14 +1,46 @@
 from PIL import Image
+from math import ceil, sqrt
 
 
 class GridDisplayer:
-    def __init__(self, images, layout, grid_shape=None, margin_shape=None):
-        self.images = images
-        self.layout = layout
+    def __init__(self, images, layout=None, grid_shape=None, margin_shape=None, force_list=False):
+        if force_list:
+            self.images = list(images)
+        elif layout is None:
+            self.images = list(images)
+        elif hasattr(layout, "__contains__") and None in layout:
+            self.images = list(images)
+        else:
+            self.images = images
+
+        # initialize attributes
+        self._layout = None
         self._grid_shape = None
         self._margin_shape = None
+
+        # call setters
+        self.layout = layout
         self.grid_shape = grid_shape
         self.margin_shape = margin_shape
+
+    @property
+    def layout(self):
+        return self._layout
+
+    @layout.setter
+    def layout(self, value):
+        if value is None:
+            n_cols = ceil(sqrt(len(self.images)))
+            n_rows = ceil(len(self.images) / n_cols)
+            self._layout = (n_cols, n_rows)
+        elif hasattr(value, "__len__"):
+            try:
+                self._layout = tuple(value[:2])
+            except IndexError as e:
+                print(e)
+                raise IndexError("Illegal layout shape")
+        else:
+            self._layout = (value, value)
 
     @property
     def margin_shape(self):
@@ -71,6 +103,6 @@ if __name__ == '__main__':
     path = os.path.join(parent_dir, "0")
     filenames = chain.from_iterable(glob.glob(os.path.join(path, "*" + ext)) for ext in ["jpg", "JPG"])
     images = (Image.open(filename) for filename in filenames)
-    displayer = GridDisplayer(images, (10, 4))
+    displayer = GridDisplayer(images)
     grids = displayer.generate()
     grids.save(os.path.join(parent_dir + "0_preview.jpg"))
