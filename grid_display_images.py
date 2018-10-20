@@ -2,10 +2,9 @@ from PIL import Image
 
 
 class GridDisplayer:
-    def __init__(self, images, n_cols, n_rows, grid_shape=None, margin_shape=None):
+    def __init__(self, images, layout, grid_shape=None, margin_shape=None):
         self.images = images
-        self.n_rows = n_rows
-        self.n_cols = n_cols
+        self.layout = layout
         self._grid_shape = None
         self._margin_shape = None
         self.grid_shape = grid_shape
@@ -46,8 +45,8 @@ class GridDisplayer:
             self._grid_shape = (value, value)
 
     def generate(self):
-        width = self.n_cols * (self.grid_shape[0] + self.margin_shape[0]) - self.margin_shape[0]
-        heigth = self.n_rows * (self.grid_shape[1] + self.margin_shape[1]) - self.margin_shape[1]
+        width = self.layout[0] * (self.grid_shape[0] + self.margin_shape[0]) - self.margin_shape[0]
+        heigth = self.layout[1] * (self.grid_shape[1] + self.margin_shape[1]) - self.margin_shape[1]
         image_iterator = iter(self.images)
 
         image_grids = Image.new("RGB", (width, heigth))
@@ -72,6 +71,6 @@ if __name__ == '__main__':
     path = os.path.join(parent_dir, "0")
     filenames = chain.from_iterable(glob.glob(os.path.join(path, "*" + ext)) for ext in ["jpg", "JPG"])
     images = (Image.open(filename) for filename in filenames)
-    displayer = GridDisplayer(images, 5, 3)
+    displayer = GridDisplayer(images, (10, 4))
     grids = displayer.generate()
     grids.save(os.path.join(parent_dir + "0_preview.jpg"))
