@@ -104,7 +104,12 @@ class GridDisplayer:
     def canvas(self):
         if not hasattr(self, "_canvas"):
             self.update_canvas()
-        return self.canvas
+        return self._canvas
+
+
+def grid_display(images, layout=None, grid_shape=None, margin_shape=None, force_list=None):
+    return GridDisplayer(
+        images, layout=layout, grid_shape=grid_shape, margin_shape=margin_shape, force_list=force_list).canvas
 
 
 if __name__ == '__main__':
@@ -116,6 +121,4 @@ if __name__ == '__main__':
     path = os.path.join(parent_dir, "1")
     filenames = chain.from_iterable(glob.glob(os.path.join(path, "*" + ext)) for ext in ["jpg", "JPG"])
     images = (Image.open(filename) for filename in filenames)
-    displayer = GridDisplayer(images)
-    grids = displayer.canvas
-    grids.save(os.path.join(parent_dir + "1_preview.jpg"))
+    grid_display(images).save(os.path.join(parent_dir + "1_preview.jpg"))
