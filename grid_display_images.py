@@ -84,9 +84,8 @@ class GridDisplayer:
         image_grids = Image.new("RGB", (width, heigth))
 
         try:
-            for i in range(0, width, self.grid_shape[0] + self.margin_shape[0]):
-                for j in range(0, heigth, self.grid_shape[1] + self.margin_shape[1]):
-                    # REVIEW might be (j, i)
+            for j in range(0, heigth, self.grid_shape[1] + self.margin_shape[1]):
+                for i in range(0, width, self.grid_shape[0] + self.margin_shape[0]):
                     image_grids.paste(next(image_iterator).resize((self.grid_shape[0], self.grid_shape[1])), (i, j))
         except StopIteration:
             pass
