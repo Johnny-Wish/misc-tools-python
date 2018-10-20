@@ -86,21 +86,25 @@ class GridDisplayer:
         else:
             self._grid_shape = (value, value)
 
-    def generate(self):
+    def update_canvas(self):
         width = self.layout[0] * (self.grid_shape[0] + self.margin_shape[0]) - self.margin_shape[0]
         heigth = self.layout[1] * (self.grid_shape[1] + self.margin_shape[1]) - self.margin_shape[1]
         image_iterator = iter(self.images)
 
-        image_grids = Image.new("RGB", (width, heigth))
+        self._canvas = Image.new("RGB", (width, heigth))
 
         try:
             for j in range(0, heigth, self.grid_shape[1] + self.margin_shape[1]):
                 for i in range(0, width, self.grid_shape[0] + self.margin_shape[0]):
-                    image_grids.paste(next(image_iterator).resize((self.grid_shape[0], self.grid_shape[1])), (i, j))
+                    self._canvas.paste(next(image_iterator).resize((self.grid_shape[0], self.grid_shape[1])), (i, j))
         except StopIteration:
             pass
 
-        return image_grids
+    @property
+    def canvas(self):
+        if not hasattr(self, "_canvas"):
+            self.update_canvas()
+        return self.canvas
 
 
 if __name__ == '__main__':
@@ -109,9 +113,9 @@ if __name__ == '__main__':
     from itertools import chain
 
     parent_dir = "/Users/liushuheng/Desktop/citrus-canker-mixed-227x227/"
-    path = os.path.join(parent_dir, "0")
+    path = os.path.join(parent_dir, "1")
     filenames = chain.from_iterable(glob.glob(os.path.join(path, "*" + ext)) for ext in ["jpg", "JPG"])
     images = (Image.open(filename) for filename in filenames)
     displayer = GridDisplayer(images)
-    grids = displayer.generate()
-    grids.save(os.path.join(parent_dir + "0_preview.jpg"))
+    grids = displayer.canvas
+    grids.save(os.path.join(parent_dir + "1_preview.jpg"))
