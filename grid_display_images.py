@@ -107,9 +107,15 @@ class GridCanvasPainter:
         return self._canvas
 
 
-def paint_grid_canvas(images, layout=None, grid_shape=None, margin_shape=None, force_list=None):
+def paint_grid_canvas(images, layout=None, grid_shape=None, margin_shape=None, force_list=None, bg_color=None):
     return GridCanvasPainter(
-        images, layout=layout, grid_shape=grid_shape, margin_shape=margin_shape, force_list=force_list).canvas
+        images,
+        layout=layout,
+        grid_shape=grid_shape,
+        margin_shape=margin_shape,
+        force_list=force_list,
+        bg_color=bg_color
+    ).canvas
 
 
 if __name__ == '__main__':
