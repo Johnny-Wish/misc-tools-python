@@ -2,12 +2,30 @@ from PIL import Image
 
 
 class GridDisplayer:
-    def __init__(self, images, n_cols, n_rows, grid_shape, margin_shape):
+    def __init__(self, images, n_cols, n_rows, grid_shape, margin_shape=None):
         self.images = images
         self.n_rows = n_rows
         self.n_cols = n_cols
+        self._margin_shape = None
         self.grid_shape = grid_shape
         self.margin_shape = margin_shape
+
+    @property
+    def margin_shape(self):
+        return self._margin_shape
+
+    @margin_shape.setter
+    def margin_shape(self, value):
+        if value is None:
+            self._margin_shape = (0, 0)
+        elif hasattr(value, "__len__"):
+            try:
+                self._margin_shape = tuple(value[:2])
+            except IndexError as e:
+                print(e)
+                raise IndexError("Illegal margin shape")
+        else:
+            self._margin_shape = (value, value)
 
     def generate(self):
         width = self.n_cols * (self.grid_shape[0] + self.margin_shape[0]) - self.margin_shape[0]
@@ -36,6 +54,6 @@ if __name__ == '__main__':
     path = os.path.join(parent_dir, "0")
     filenames = chain.from_iterable(glob.glob(os.path.join(path, "*" + ext)) for ext in ["jpg", "JPG"])
     images = (Image.open(filename) for filename in filenames)
-    displayer = GridDisplayer(images, 5, 3, (227, 227), (2, 2))
+    displayer = GridDisplayer(images, 5, 3, (64, 64))
     grids = displayer.generate()
     grids.save(os.path.join(parent_dir + "0_preview.jpg"))
