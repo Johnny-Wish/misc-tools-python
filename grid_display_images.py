@@ -2,7 +2,7 @@ from PIL import Image
 from math import ceil, sqrt
 
 
-class GridDisplayer:
+class GridCanvasPainter:
     def __init__(self, images, layout=None, grid_shape=None, margin_shape=None, force_list=False):
         if force_list:
             self.images = list(images)
@@ -107,8 +107,8 @@ class GridDisplayer:
         return self._canvas
 
 
-def grid_display(images, layout=None, grid_shape=None, margin_shape=None, force_list=None):
-    return GridDisplayer(
+def paint_grid_canvas(images, layout=None, grid_shape=None, margin_shape=None, force_list=None):
+    return GridCanvasPainter(
         images, layout=layout, grid_shape=grid_shape, margin_shape=margin_shape, force_list=force_list).canvas
 
 
@@ -121,4 +121,4 @@ if __name__ == '__main__':
     path = os.path.join(parent_dir, "1")
     filenames = chain.from_iterable(glob.glob(os.path.join(path, "*" + ext)) for ext in ["jpg", "JPG"])
     images = (Image.open(filename) for filename in filenames)
-    grid_display(images).save(os.path.join(parent_dir + "1_preview.jpg"))
+    paint_grid_canvas(images).save(os.path.join(parent_dir + "1_preview.jpg"))
