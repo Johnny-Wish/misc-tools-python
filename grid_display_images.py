@@ -35,10 +35,20 @@ class GridDisplayer:
             self._layout = (n_cols, n_rows)
         elif hasattr(value, "__len__"):
             try:
-                self._layout = tuple(value[:2])
+                n_cols = value[0]
+                n_rows = value[1]
             except IndexError as e:
                 print(e)
                 raise IndexError("Illegal layout shape")
+            if n_cols is None and n_rows is None:
+                # raise ValueError("n_cols and n_rows cannot both be None. Check layout, got {}".format(value))
+                self.layout = None
+                return
+            if n_cols is None:
+                n_cols = ceil(len(self.images) / n_rows)
+            if n_rows is None:
+                n_rows = ceil(len(self.images) / n_cols)
+            self._layout = (n_cols, n_rows)
         else:
             self._layout = (value, value)
 
