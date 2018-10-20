@@ -13,11 +13,6 @@ class GridCanvasPainter:
         else:
             self.images = images
 
-        # initialize attributes
-        self._layout = None
-        self._grid_shape = None
-        self._margin_shape = None
-
         # call setters
         self.layout = layout
         self.grid_shape = grid_shape
