@@ -3,7 +3,7 @@ from math import ceil, sqrt
 
 
 class GridCanvasPainter:
-    def __init__(self, images, layout=None, grid_shape=None, margin_shape=None, force_list=False):
+    def __init__(self, images, layout=None, grid_shape=None, margin_shape=None, force_list=False, bg_color=None):
         if force_list:
             self.images = list(images)
         elif layout is None:
@@ -17,6 +17,11 @@ class GridCanvasPainter:
         self.layout = layout
         self.grid_shape = grid_shape
         self.margin_shape = margin_shape
+
+        if bg_color is None:
+            self.bg_color = 0
+        else:
+            self.bg_color = bg_color
 
     @property
     def layout(self):
@@ -86,7 +91,7 @@ class GridCanvasPainter:
         heigth = self.layout[1] * (self.grid_shape[1] + self.margin_shape[1]) - self.margin_shape[1]
         image_iterator = iter(self.images)
 
-        self._canvas = Image.new("RGB", (width, heigth))
+        self._canvas = Image.new("RGB", (width, heigth), color=self.bg_color)
 
         try:
             for j in range(0, heigth, self.grid_shape[1] + self.margin_shape[1]):
