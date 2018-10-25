@@ -22,5 +22,23 @@ def rename_path(src, rule, force=False):
     os.rename(src, rule(src))  # This line does force renaming
 
 
+def rename_subpaths(parent_dir, flt, rule, abs_path=False, force=False):
+    """
+    renames certain subdirs to a new path with specific rules
+    :param parent_dir: str, parent dir which contains all dirs to be renamed
+    :param flt: callable or None, filter for files to be renamed, should be str -> bool
+    :param rule: callable, rule for renaming each subpath, should be str -> str
+    :param abs_path: bool, indicates whether `rule` and `flt` accept and return absolute paths, default=False
+    :param force: bool, force rename in case of a conflict if True, default=False
+    :return: None
+    """
+
+    subdirs = os.listdir(parent_dir)
+    if abs_path:
+        subdirs = [os.path.join(parent_dir, subdir) for subdir in subdirs]
+    for subdir in filter(flt, subdirs):
+        rename_path(subdir, rule, force)
+
+
 if __name__ == '__main__':
     rename_path("foo_dir", lambda s: "bar_dir/bar_subdir", force=True)
