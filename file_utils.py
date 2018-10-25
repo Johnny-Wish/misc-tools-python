@@ -19,7 +19,7 @@ def rename_path(src, rule, force=False):
         shutil.rmtree(dest)
         os.makedirs(dest, exist_ok=True)
 
-    os.rename(src, rule(src))  # This line does force renaming
+    os.rename(src, dest)  # This line does force renaming
 
 
 def rename_subpaths(parent_dir, flt, rule, abs_path=True, force=False):
