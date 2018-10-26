@@ -12,6 +12,8 @@ def rename_path(src, rule, force=False):
     """
 
     dest = rule(src)
+    if dest == src:
+        return
     if not force and os.path.exists(dest):
         raise FileExistsError("The destination file {} exists".format(dest))
 
