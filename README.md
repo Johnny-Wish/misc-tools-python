@@ -5,7 +5,7 @@
 This repository is expected to contain a collection of tools that are less-frequentyly used than those appearing in standard python libraries. Currently, this repository includes:
 
 - image_utils.py
-  - grid canvas painter
+  - grid canvas painter (Painter class and wrapper function)
 - file_utils.py
   - function for renaming a folder/file (which enables moving folder/file)
   - function for renaming folders and files nested under a common parent
