@@ -3,7 +3,27 @@ from math import ceil, sqrt
 
 
 class GridCanvasPainter:
-    def __init__(self, images, layout=None, grid_shape=None, margin_shape=None, force_list=False, bg_color=None):
+    def __init__(self, images, layout=None, grid_shape=None, gap_shape=None, force_list=False, bg_color=None):
+        """
+        painter for a new canvas with images placed on it as grids
+        :param images: iterable, sequence of PIL images
+        :param layout: None, int, or tuple, columns by rows of thumbnails to display on canvas,
+            if None, automatically uses ceil(sqrt(n_images)) as n_cols, and floor(sqrt(n_images)) as n_rows
+            if int, uses `layout` as both n_cols and n_rows
+            if tuple, the first integer is construed (n_cols, n_rows),
+                if either element in tuple is None, automatically computes the n_cols or n_rows
+            note that automatic computation result in listing `images` sequence in MEMORY, which can be inefficient
+        :param grid_shape: None, int, or tuple, number of pixels in width and height of each thumbnail
+            if None: uses default = 32 * 32
+            if int: construed as both width and height for thumbnails
+            if tuple: construed as (width, height) for thumbnails
+        :param gap_shape: None, int, or tuple, shape of gaps in between thumbnails
+            if None: no gap is used, thumbnails are placed right next to each other
+            if int: construed as both width and height for gaps
+            if tuple: construed as (width, height) for gaps
+        :param force_list: bool, if set to True, `images` will be converted to list, default=False
+        :param bg_color: int, background color for new canvas, default=None
+        """
         if force_list:
             self.images = list(images)
         elif layout is None:
@@ -16,7 +36,7 @@ class GridCanvasPainter:
         # call setters
         self.layout = layout
         self.grid_shape = grid_shape
-        self.margin_shape = margin_shape
+        self.margin_shape = gap_shape
 
         if bg_color is None:
             self.bg_color = 0
@@ -100,6 +120,7 @@ class GridCanvasPainter:
         except StopIteration:
             pass
 
+    # TODO consider force updating
     @property
     def canvas(self):
         if not hasattr(self, "_canvas"):
@@ -107,12 +128,34 @@ class GridCanvasPainter:
         return self._canvas
 
 
-def paint_grid_canvas(images, layout=None, grid_shape=None, margin_shape=None, force_list=None, bg_color=None):
+def paint_grid_canvas(images, layout=None, grid_shape=None, gap_shape=None, force_list=None, bg_color=None):
+    """
+
+    :param images: iterable, sequence of PIL images
+    :param layout: None, int, or tuple, columns by rows of thumbnails to display on canvas,
+        if None, automatically uses ceil(sqrt(n_images)) as n_cols, and floor(sqrt(n_images)) as n_rows
+        if int, uses `layout` as both n_cols and n_rows
+        if tuple, the first integer is construed (n_cols, n_rows),
+            if either element in tuple is None, automatically computes the n_cols or n_rows
+        note that automatic computation result in listing `images` sequence in MEMORY, which can be inefficient
+    :param grid_shape: None, int, or tuple, number of pixels in width and height of each thumbnail
+        if None: uses default = 32 * 32
+        if int: construed as both width and height for thumbnails
+        if tuple: construed as (width, height) for thumbnails
+    :param gap_shape: None, int, or tuple, shape of gaps in between thumbnails
+        if None: no gap is used, thumbnails are placed right next to each other
+        if int: construed as both width and height for gaps
+        if tuple: construed as (width, height) for gaps
+    :param force_list: bool, if set to True, `images` will be converted to list, default=False
+    :param bg_color: int, background color for new canvas, default=None
+    :return: a new canvas with images placed on it as grids
+    """
+
     return GridCanvasPainter(
         images,
         layout=layout,
         grid_shape=grid_shape,
-        margin_shape=margin_shape,
+        gap_shape=gap_shape,
         force_list=force_list,
         bg_color=bg_color
     ).canvas
