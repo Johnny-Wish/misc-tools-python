@@ -159,29 +159,3 @@ def paint_grid_canvas(images, layout=None, grid_shape=None, gap_shape=None, forc
         force_list=force_list,
         bg_color=bg_color
     ).canvas
-
-
-def auto_alpha(image: Image.Image, alpha_value=0, threshold=230):
-    assert "RGB" in image.mode, "image has mode {} instead of RGB or RGBA".format(image.mode)
-
-    # No action to perform for an image that already has an alpha channel
-    if image.mode == "RGBA":
-        return image
-    new_image = image.convert("RGBA")
-
-    transform = lambda color: color[:3] + (alpha_value,)
-    data = [transform(color) if min(color) > threshold else color for color in new_image.getdata()]
-    new_image.putdata(data)
-    return new_image
-
-
-if __name__ == '__main__':
-    import glob
-    import os
-    from itertools import chain
-
-    parent_dir = "/Users/liushuheng/Desktop/citrus-canker-mixed-227x227/"
-    path = os.path.join(parent_dir, "1")
-    filenames = chain.from_iterable(glob.glob(os.path.join(path, "*" + ext)) for ext in ["jpg", "JPG"])
-    images = (Image.open(filename) for filename in filenames)
-    paint_grid_canvas(images).save(os.path.join(parent_dir + "1_preview.jpg"))
