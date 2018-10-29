@@ -1,4 +1,6 @@
 .idea/
 *test.py
+test*py
 *temp.py
+temp*py
 __pycache__/
