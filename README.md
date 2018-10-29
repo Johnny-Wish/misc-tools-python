@@ -6,9 +6,12 @@ This repository is expected to contain a collection of tools that are less-frequ
 
 - image_utils.py
   - grid canvas painter (Painter class and wrapper function)
+  - _[Under Construction]_ class & wrapper function for adding auto adding alpha values to RGB images
 - file_utils.py
   - function for renaming a folder/file (which enables moving folder/file)
   - function for renaming folders and files nested under a common parent
+- crypto_utils.py
+  - _[Under Construction]_ a class for auto encoding and decoding files with AES-256 algorithm
 
 ## Platforms
 
