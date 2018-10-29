@@ -2,3 +2,4 @@
 *test.py
 *temp.py
 __pycache__/
+.cache/
