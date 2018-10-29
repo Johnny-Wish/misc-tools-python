@@ -167,9 +167,12 @@ def auto_alpha(image: Image.Image, alpha_value=0, threshold=230):
     # No action to perform for an image that already has an alpha channel
     if image.mode == "RGBA":
         return image
+    new_image = image.convert("RGBA")
 
-    data = [(0, 0, 0, alpha_value) if min(item) > threshold else item for item in image.getdata()]
-    return image.convert("RGBA").putdata(data)
+    transform = lambda color: color[:3] + (alpha_value,)
+    data = [transform(color) if min(color) > threshold else color for color in new_image.getdata()]
+    new_image.putdata(data)
+    return new_image
 
 
 if __name__ == '__main__':
