@@ -161,6 +161,17 @@ def paint_grid_canvas(images, layout=None, grid_shape=None, gap_shape=None, forc
     ).canvas
 
 
+def auto_alpha(image: Image.Image, alpha_value=0, threshold=230):
+    assert "RGB" in image.mode, "image has mode {} instead of RGB or RGBA".format(image.mode)
+
+    # No action to perform for an image that already has an alpha channel
+    if image.mode == "RGBA":
+        return image
+
+    data = [(0, 0, 0, alpha_value) if min(item) > threshold else item for item in image.getdata()]
+    return image.convert("RGBA").putdata(data)
+
+
 if __name__ == '__main__':
     import glob
     import os
